@@ -1,0 +1,4 @@
+{
+	"reports": [{"report": "Internal:All", "section": "Internal", "label": "All", "csv": "internal_all"}],
+	"reportTypes": ["Internal"]
+}

@@ -1,0 +1,7 @@
+celery
+Flask
+flower
+redis
+psutil
+psycopg2
+watchdog

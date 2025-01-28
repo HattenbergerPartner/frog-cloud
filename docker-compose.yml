@@ -1,0 +1,111 @@
+services:
+  fc-database:
+    container_name: fc-database
+    build:
+      context: ./database
+      dockerfile: Dockerfile
+    ports:
+      - "5332:5432"
+    environment:
+      POSTGRES_USER: "${POSTGRES_USER}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+      POSTGRES_DB: "${POSTGRES_DB}"
+    restart: unless-stopped
+  fc-redis:
+    container_name: fc-redis
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./worker/redis.conf:/usr/local/etc/redis/redis.conf
+    command: redis-server /usr/local/etc/redis/redis.conf
+  fc-worker:
+    container_name: fc-worker
+    build:
+      context: ./worker
+      dockerfile: Dockerfile
+    hostname: fc-worker
+    ports:
+      - 5001:5666
+    environment:
+      CELERY_BROKER_URL: redis://fc-redis
+      CELERY_RESULT_BACKEND: redis://fc-redis
+      FLASK_SERVER_PORT: 5666
+    volumes:
+      - ./worker:/queue
+      - ./config/spider.config:/root/.ScreamingFrogSEOSpider/spider.config
+      - ./config/licence.txt:/root/.ScreamingFrogSEOSpider/licence.txt
+      - ./config/.screamingfrogseospider:/root/.ScreamingFrogSEOSpider/.screamingfrogseospider
+      - ./crawl-data:/tmp/crawl-data
+      - ./config/crawl-config:/tmp/crawl-config
+      - ./config/reports.json:/queue/reports.json
+    links:
+      - fc-redis
+    depends_on:
+      - fc-redis
+  fc-monitor:
+    container_name: fc-monitor
+    build:
+      context: ./monitor
+      dockerfile: Dockerfile
+    ports:
+     - "5555:5555"
+    command:  ['celery', 'flower', '-A', 'tasks']
+    environment:
+      CELERY_BROKER_URL: redis://fc-redis:6379/0
+      CELERY_RESULT_BACKEND: redis://fc-redis:6379/0
+    depends_on:
+      - fc-redis
+      - fc-worker
+    volumes:
+      - ./worker:/queue
+    profiles:
+      - dev
+  fc-scheduler:
+    container_name: fc-scheduler
+    build:
+      context: ./scheduler
+      target: builder
+      dockerfile: Dockerfile
+    ports:
+      - 5000:5000
+    stop_signal: SIGINT
+    environment:
+      FLASK_SERVER_PORT: 5000
+    volumes:
+      - ./scheduler:/src
+      - ./config/spider.config:/root/.ScreamingFrogSEOSpider/spider.config
+      - ./config/license.txt:/root/.ScreamingFrogSEOSpider/license.txt
+      - ./crawl-data:/tmp/crawl-data
+      - ./config/crawl-config:/tmp/crawl-config
+      - ./config/reports.json:/tmp/reports.json
+  fc-manager:
+    container_name: fc-manager
+    build:
+      context: ./manager
+      dockerfile: Dockerfile
+    hostname: fc-manager
+    ports:
+      - 3000:3000
+    tty: true
+    volumes:
+      - ./manager:/app
+    profiles:
+      - dev
+  fc-nginx:
+    container_name: fc-nginx
+    build:
+      context: ./
+      dockerfile: Dockerfile.nginx
+    restart: unless-stopped
+    volumes:
+      - ./nginx-prod.conf/default.conf:/etc/nginx/conf.d/default.conf
+      - ./crawl-data:/usr/share/nginx/html/crawl-data
+    ports:
+      - 80:80
+    networks:
+      - fc-network
+volumes:
+  fc-database:
+networks:
+  fc-network:
