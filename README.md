@@ -8,19 +8,19 @@ You can run Frog Cloud locally or deploy to popular hosting services such as AWS
 
 Run `docker-compose up --build` to set up the various services and start each container. Once all services have been built you can open the `manager` app and configure your instance.
 
-![Frog Cloud Manager app](https://github.com/myawesomebike/frog-cloud/raw/master/img/getting-started.png)
+![Frog Cloud Manager app](https://github.com/myawesomebike/frog-cloud/raw/main/img/getting-started.png)
 
 ### ScreamingFrog Configuration
 
 Before you can start crawling you'll need to add your ScreamingFrog license information and configure ScreamingFrog memory settings based on the environment you're using. You can also upload ScreamingFrog configuration files that you've exported from the desktop version of ScreamingFrog.'
 
-![Frog Cloud settings](https://github.com/myawesomebike/frog-cloud/raw/master/img/settings.png)
+![Frog Cloud settings](https://github.com/myawesomebike/frog-cloud/raw/main/img/settings.png)
 
 ### Starting a Crawl
 
 Once you've configured your Frog Cloud instance you can request a new crawl (http://localhost:3000/crawl). Enter the starting URL, select any custom configurations you've uploaded, and select the reports you'd like to export.
 
-![Frog Cloud crawling](https://github.com/myawesomebike/frog-cloud/raw/master/img/crawling.png)
+![Frog Cloud crawling](https://github.com/myawesomebike/frog-cloud/raw/main/img/crawling.png)
 
 ## How Does Frog Cloud Work?
 
