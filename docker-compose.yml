@@ -106,6 +106,7 @@ services:
       - ./crawl-data:/usr/share/nginx/html/crawl-data
       - ./certbot/conf:/etc/letsencrypt
       - ./certbot/www:/var/www/certbot
+      - ./nginx-prod.conf/.htpasswd:/etc/nginx/.htpasswd:ro
     ports:
       - 80:80
       - 443:443
