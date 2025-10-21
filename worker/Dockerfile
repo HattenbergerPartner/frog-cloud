@@ -1,4 +1,6 @@
-FROM python:3.8-buster AS builder
+FROM python:3.8-slim-bullseye AS builder
+
+ENV DEBIAN_FRONTEND=noninteractive
 
 ENV CELERY_BROKER_URL redis://fc-redis:6379/0
 ENV CELERY_RESULT_BACKEND redis://fc-redis:6379/0
@@ -9,25 +11,22 @@ ENV POSTGRES_DB fcdb
 ENV C_FORCE_ROOT true
 
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends g++ gcc \
+    && apt-get install -y --no-install-recommends g++ gcc wget xdg-utils zenity fontconfig supervisor ca-certificates \
     && rm -rf /var/lib/apt/lists/* \
-    && pip install cryptography
+    && pip install --no-cache-dir cryptography
 
 WORKDIR /
 
 RUN sed -r -i 's/^deb(.*)$/deb\1 contrib/g' /etc/apt/sources.list
 
 RUN apt-get update && apt-get install -y \
-    wget \
-    xdg-utils \
-    zenity \
-    ttf-mscorefonts-installer \
-    fontconfig \
-    supervisor
+    ttf-mscorefonts-installer || true
 
 RUN apt-get update \
-	&& wget https://download.screamingfrog.co.uk/products/seo-spider/screamingfrogseospider_20.4_all.deb \
-    && apt install ./screamingfrogseospider_20.4_all.deb
+	&& wget -q https://download.screamingfrog.co.uk/products/seo-spider/screamingfrogseospider_20.4_all.deb \
+    && apt-get install -y --no-install-recommends ./screamingfrogseospider_20.4_all.deb \
+    && rm -f screamingfrogseospider_20.4_all.deb \
+    && rm -rf /var/lib/apt/lists/*
 
 COPY . /queue
 WORKDIR /queue
