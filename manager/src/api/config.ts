@@ -1,5 +1,5 @@
 export const getConfigs = async (): Promise<any[]> => {
-  const url = new URL('http://localhost:5000/configs');
+  const url = new URL('/api/configs', window.location.origin);
   return await fetch(url.href, {
     method: 'post',
     headers: {
@@ -22,7 +22,7 @@ export const uploadConfig = async (
   configDescription: string,
   configData: any
 ): Promise<any> => {
-  const url = new URL('http://localhost:5000/upload-config');
+  const url = new URL('/api/upload-config', window.location.origin);
   const formData = new FormData();
   formData.append('name', configName);
   formData.append('description', configDescription);
@@ -45,7 +45,7 @@ export const uploadConfig = async (
 export const removeConfig = async (
   configId: string,
 ): Promise<any> => {
-  const url = new URL('http://localhost:5000/remove-config');
+  const url = new URL('/api/remove-config', window.location.origin);
   return await fetch(url.href, {
     method: 'post',
     headers: {

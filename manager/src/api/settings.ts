@@ -1,7 +1,7 @@
 import { SettingsInterface, SettingsUpdateInterface } from '../interfaces/Settings';
 
 export const checkSettings = async (): Promise<SettingsInterface> => {
-  const url = new URL('http://localhost:5001/settings');
+  const url = new URL('/api/settings', window.location.origin);
   return await fetch(url.href, {
     method: 'post',
     headers: {
@@ -20,7 +20,7 @@ export const checkSettings = async (): Promise<SettingsInterface> => {
 }
 
 export const updateSettings = async (settings: SettingsUpdateInterface): Promise<any> => {
-  const url = new URL('http://localhost:5001/update');
+  const url = new URL('/api/update', window.location.origin);
   return await fetch(url.href, {
     method: 'post',
     headers: {

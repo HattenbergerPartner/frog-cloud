@@ -4,7 +4,7 @@ export const startCrawl = async (
   requestReports: string[],
   configId: string,
 ): Promise<any> => {
-  const url = new URL('http://localhost:5000/crawl');
+  const url = new URL('/api/crawl', window.location.origin);
   return await fetch(url.href, {
     method: 'post',
     headers: {
@@ -30,7 +30,7 @@ export const startCrawl = async (
 export const checkCrawl = async (
   taskID: string,
 ): Promise<any> => {
-  const url = new URL('http://localhost:5000/status');
+  const url = new URL('/api/status', window.location.origin);
   return await fetch(url.href, {
     method: 'post',
     headers: {
@@ -54,7 +54,7 @@ export const checkCrawl = async (
 export const cancelCrawl = async (
   taskID: string,
 ): Promise<any> => {
-  const url = new URL('http://localhost:5000/cancel');
+  const url = new URL('/api/cancel', window.location.origin);
   return await fetch(url.href, {
     method: 'post',
     headers: {
