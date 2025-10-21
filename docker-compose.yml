@@ -111,6 +111,8 @@ services:
       - 443:443
     networks:
       - fc-network
+    depends_on:
+      - fc-scheduler
   fc-certbot:
     container_name: fc-certbot
     image: certbot/certbot
