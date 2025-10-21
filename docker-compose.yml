@@ -79,6 +79,9 @@ services:
       - ./crawl-data:/tmp/crawl-data
       - ./config/crawl-config:/tmp/crawl-config
       - ./config/reports.json:/tmp/reports.json
+    networks:
+      - default
+      - fc-network
   fc-manager:
     container_name: fc-manager
     build:
