@@ -3,5 +3,5 @@ Flask
 flower
 redis
 psutil
-psycopg2
+psycopg2-binary
 watchdog
