@@ -43,6 +43,9 @@ services:
       - fc-redis
     depends_on:
       - fc-redis
+    networks:
+      - default
+      - fc-network
   fc-monitor:
     container_name: fc-monitor
     build:
