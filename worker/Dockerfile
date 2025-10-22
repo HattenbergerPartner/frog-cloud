@@ -36,4 +36,4 @@ RUN pip install -r requirements.txt
 
 ENV C_FORCE_ROOT=1
 
-CMD ["supervisord"]
+CMD ["supervisord", "-c", "/queue/supervisord.conf"]
